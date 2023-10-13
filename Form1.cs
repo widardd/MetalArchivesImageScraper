@@ -63,7 +63,7 @@ namespace MetalArchivesImageScraper
                 {
                     using (WebClient client = new WebClient())
                     {
-                        string bandPageHtml = client.DownloadString(bandUrl);
+                        string bandPageHtml = client.DownloadString(bandUrl); // Download HTML content from the initial URL
 
                         // Check if the page contains "may refer to" indicating multiple bands.
                         if (bandPageHtml.Contains("may refer to"))
@@ -75,7 +75,8 @@ namespace MetalArchivesImageScraper
                                 var selectedChoice = ShowBandChoiceDialog(bandName, choices);
                                 if (!string.IsNullOrEmpty(selectedChoice))
                                 {
-                                    bandUrl = selectedChoice;
+                                    bandUrl = selectedChoice; // Update the bandUrl with the selected choice
+                                    bandPageHtml = client.DownloadString(bandUrl); // Download HTML content from the updated URL
                                 }
                                 else
                                 {
@@ -87,8 +88,11 @@ namespace MetalArchivesImageScraper
 
                         var doc = new HtmlAgilityPack.HtmlDocument();
                         doc.LoadHtml(bandPageHtml);
+                        // Now you have the updated HTML content in bandPageHtml.
+                    
 
-                        var logoNode = doc.DocumentNode.SelectSingleNode("//div[@id='band_sidebar']//div[@class='band_name_img']//img");
+
+                    var logoNode = doc.DocumentNode.SelectSingleNode("//div[@id='band_sidebar']//div[@class='band_name_img']//img");
                         var photoNode = doc.DocumentNode.SelectSingleNode("//div[@id='band_sidebar']//div[@class='band_img']//img");
 
                         if (logoNode != null)
